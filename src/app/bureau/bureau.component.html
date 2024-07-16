@@ -1,0 +1,6 @@
+
+<div [ngClass]="{'plein': plein, 'vide': !plein}">
+  <img *ngIf="plein" [src]="pleinImageUrl" width="100" height="100">
+  <img *ngIf="!plein" [src]="videImageUrl" width="100" height="100" >
+</div>
+
