@@ -3,6 +3,7 @@ import { BureauComponent } from './bureau/bureau.component';
 import { PlateauComponent } from './plateau/plateau.component';
 
 export const appRoutes: Routes = [
-  { path: '', component: PlateauComponent },
-  { path: 'bureau', component: BureauComponent }
+  { path: 'bureau', component: BureauComponent },
+  { path: 'plateau', component: PlateauComponent },
+  { path: '', redirectTo: '/bureau', pathMatch: 'full' }
 ];

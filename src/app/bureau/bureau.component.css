@@ -1,8 +1,17 @@
-.plein img {
+img {
+  width: 75px; /* Ajustez la largeur selon vos besoins */
+  height: 75px; /* Ajustez la hauteur selon vos besoins */
+  object-fit: cover; /* Assurez-vous que l'image est bien ajustée dans les dimensions spécifiées */
+  border-radius: 10px; /* Ajoutez des coins arrondis si nécessaire */
+  .plein img {
     border: 5px solid rgb(168, 40, 40);
   }
   
   .vide img {
     border: 5px solid rgb(12, 124, 12);
   }
+}
+
+
+
   
