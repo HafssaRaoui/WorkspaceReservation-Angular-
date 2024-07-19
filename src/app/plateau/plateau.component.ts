@@ -5,7 +5,7 @@ import { PositionService } from '../position.service';
 import { Position, Reservation } from '../models/position.model'; // Assurez-vous d'importer l'interface
 import { MatDialog } from '@angular/material/dialog';
 import { PopupComponent } from '../popup/popup.component';
-
+import { ActivatedRoute,Router } from '@angular/router';
 @Component({
   selector: 'app-plateau',
   templateUrl: './plateau.component.html',
@@ -15,11 +15,37 @@ import { PopupComponent } from '../popup/popup.component';
 })
 export class PlateauComponent implements OnInit {
   bureaux: { plein: boolean, reservations: Reservation[] ,numero: string}[] = [];
+  selectedDate: string = this.formatDate(new Date());
 
-  constructor(private positionService: PositionService, public dialog: MatDialog) {}
+  constructor(
+    private positionService: PositionService,
+    private route: ActivatedRoute,
+    private router: Router,public dialog: MatDialog
+  ) {}
 
   ngOnInit() {
-    this.positionService.getPositions().subscribe({
+    // Fetch the selected date if available
+    this.route.queryParams.subscribe(params => {
+      const dateParam = params['date'];
+      const dateToFetch = dateParam ? dateParam : this.formatDate(new Date());
+      
+      this.positionService.getPositions(dateToFetch).subscribe({
+        next: (positions: Position[]) => {
+          // Transformez les positions en bureaux
+          this.bureaux = positions.map(position => ({
+            plein: position.reservations && position.reservations.length > 0
+          }));
+          console.log('Les positions : ', this.bureaux);
+        },
+        error: (error) => {
+          console.error('Erreur lors de la récupération des positions :', error);
+        }
+      });
+    });
+  }
+  
+  fetchPositions(date: string) {
+    this.positionService.getPositions(date).subscribe({
       next: (positions: Position[]) => {
         console.log('Positions received:', positions);
         // Transformez les positions en bureaux avec les informations sur les réservations
@@ -28,7 +54,7 @@ export class PlateauComponent implements OnInit {
           reservations: position.reservations || [], // Assurez-vous de gérer les cas où reservations est null
           numero: position.numero
         }));
-        
+        console.log('Les positions : ', this.bureaux);
       },
       error: (error) => {
         console.error('Erreur lors de la récupération des positions :', error);
@@ -51,3 +77,12 @@ export class PlateauComponent implements OnInit {
   }
 }
 
+
+  formatDate(date: Date): string {
+    // Formattez la date comme DD-MM-YYYY
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  }
+}

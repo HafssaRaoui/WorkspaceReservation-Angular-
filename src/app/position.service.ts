@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Position } from './models/position.model'; // Assurez-vous d'importer l'interface
+import { Position } from './models/position.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,7 +12,17 @@ export class PositionService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getPositions(): Observable<Position[]> {
-    return this.httpClient.get<Position[]>(this.API_URL + this.ENDPOINT_Position);
+  getPositions(date?: string): Observable<Position[]> {
+    let url = `${this.API_URL}${this.ENDPOINT_Position}`;
+    if (date) {
+      // Convert date from DD-MM-YYYY to YYYY-MM-DD format
+     
+      url += `?date=${date}`;
+    }
+    console.log('URL générée :', url);
+    return this.httpClient.get<Position[]>(url);
   }
+
+ 
 }
+

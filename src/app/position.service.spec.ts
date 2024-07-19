@@ -1,16 +1,18 @@
-import { TestBed } from '@angular/core/testing';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { Position } from './models/position.model'; // Assurez-vous d'importer l'interface
 
-import { PositionService } from './position.service';
+@Injectable({
+  providedIn: 'root'
+})
+export class PositionService {
+  readonly API_URL = "http://localhost:8080";
+  readonly ENDPOINT_Position = "/positions/reserved";
 
-describe('PositionService', () => {
-  let service: PositionService;
+  constructor(private httpClient: HttpClient) { }
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(PositionService);
-  });
-
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
-});
+  getPositions(): Observable<Position[]> {
+    return this.httpClient.get<Position[]>(this.API_URL + this.ENDPOINT_Position);
+  }
+}

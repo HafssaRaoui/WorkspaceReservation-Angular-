@@ -1,4 +1,10 @@
-
+img {
+  width: 75px; /* Ajustez la largeur selon vos besoins */
+  height: 75px; /* Ajustez la hauteur selon vos besoins */
+  object-fit: cover; /* Assurez-vous que l'image est bien ajustée dans les dimensions spécifiées */
+  border-radius: 10px; 
+  
+  
   .plein img {
     border: 5px solid rgb(168, 40, 40);
     width: 75px; /* Ajustez la largeur selon vos besoins */
