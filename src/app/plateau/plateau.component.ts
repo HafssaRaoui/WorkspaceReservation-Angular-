@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { BureauComponent } from '../bureau/bureau.component';
 import { PositionService } from '../position.service';
 import { Position, Reservation } from '../models/position.model'; // Assurez-vous d'importer l'interface
+import { MatDialog } from '@angular/material/dialog';
+import { PopupComponent } from '../popup/popup.component';
 
 @Component({
   selector: 'app-plateau',
@@ -14,7 +16,7 @@ import { Position, Reservation } from '../models/position.model'; // Assurez-vou
 export class PlateauComponent implements OnInit {
   bureaux: { plein: boolean, reservations: Reservation[] ,numero: string}[] = [];
 
-  constructor(private positionService: PositionService) {}
+  constructor(private positionService: PositionService, public dialog: MatDialog) {}
 
   ngOnInit() {
     this.positionService.getPositions().subscribe({
@@ -31,6 +33,20 @@ export class PlateauComponent implements OnInit {
       error: (error) => {
         console.error('Erreur lors de la récupération des positions :', error);
       }
+    });
+  }
+  openDialog(bureau: { plein: boolean, reservations: Reservation[] , numero: string }): void {
+    const dialogRef = this.dialog.open(PopupComponent, {
+      width: '400px',
+      data: {
+        isReserved: bureau.plein,
+        numero: bureau.numero,
+        reservations: bureau.reservations
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Le dialogue a été fermé');
     });
   }
 }

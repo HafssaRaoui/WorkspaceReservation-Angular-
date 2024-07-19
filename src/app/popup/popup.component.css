@@ -1,0 +1,40 @@
+/* Style pour le conteneur du dialogue */
+.mat-dialog-container {
+    border-radius: 20px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    color: #ffffff;
+    padding: 20px;
+    max-width: 500px;
+    min-height: 200px;
+  }
+  
+  /* Styles pour le contenu du pop-up */
+  .popup-content {
+    font-family: 'Arial', sans-serif;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  
+  /* Styles pour les actions du pop-up */
+  .popup-actions {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  /* Styles pour les boutons */
+  .popup-actions .mat-button {
+    background: #0f0c29;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 10px 20px;
+    margin: 5px;
+    min-width: 150px;
+    font-family: 'Arial', sans-serif;
+  }
+  
+  .popup-actions .mat-button:hover {
+    background: #0056b3;
+  }
+  

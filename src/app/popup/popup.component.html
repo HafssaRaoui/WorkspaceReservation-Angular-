@@ -1,0 +1,14 @@
+<!-- Assurez-vous que le sélecteur mat-dialog-container est approprié pour votre usage -->
+<div mat-dialog-container style="background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e); border-radius: 10px; padding: 20px; width: auto; height: auto; display: flex; flex-direction: column; justify-content: space-between;">
+
+    <div mat-dialog-content style="font-family: 'Roboto', sans-serif; text-align: center; color: #ffffff; margin-bottom: 20px;">
+      <p>{{message}}</p>
+    </div>
+  
+    <div mat-dialog-actions style="display: flex; justify-content: center; gap: 10px;">
+      <button mat-button *ngIf="!isReserved" (click)="reserve()" style="background: #24243e; color: #ffffff; border-radius: 5px; padding: 10px 20px; min-width: 150px; text-align: center;">Réserver</button>
+      <button mat-button *ngIf="isReserved" (click)="release()" style="background: #24243e; color: #ffffff; border-radius: 5px; padding: 10px 20px; min-width: 150px; text-align: center;">Libérer</button>
+    </div>
+  
+  </div>
+  
