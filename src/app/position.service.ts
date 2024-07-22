@@ -15,7 +15,7 @@ export class PositionService {
   getPositions(date?: string): Observable<Position[]> {
     let url = `${this.API_URL}${this.ENDPOINT_Position}`;
     if (date) {
-      // Convert date from DD-MM-YYYY to YYYY-MM-DD format
+      
      
       url += `?date=${date}`;
     }

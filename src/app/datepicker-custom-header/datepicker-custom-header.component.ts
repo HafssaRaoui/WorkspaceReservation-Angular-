@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit,Output,EventEmitter } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Inject, OnDestroy, OnInit,Output,EventEmitter,Input,OnChanges,SimpleChanges } from '@angular/core';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
@@ -16,6 +16,7 @@ import { BehaviorSubject, Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
 import { CUSTOM_DATE_FORMATS } from './custom-date-formats'; // Ensure correct path
 import { CustomDateAdapter } from './custom-date-adapter'; // Ensure correct path
+import { ChangeDetectorRef } from '@angular/core';
 
 /** @title Datepicker with custom calendar header */
 @Component({
@@ -37,7 +38,8 @@ import { CustomDateAdapter } from './custom-date-adapter'; // Ensure correct pat
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DatepickerCustomHeaderExample implements OnInit {
+export class DatepickerCustomHeaderExample implements OnInit , OnChanges {
+  @Input() selectedDate: Date | null = null; 
   readonly exampleHeader = ExampleHeader;
   dateControl = new FormControl(new Date());
   @Output() dateSelected = new EventEmitter<string>();
@@ -53,6 +55,14 @@ export class DatepickerCustomHeaderExample implements OnInit {
 
   
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['selectedDate'] && this.selectedDate) {
+      this.dateControl.setValue(this.selectedDate, { emitEvent: false });
+    }
+  }
+
+ 
   private formatDate(date: Date): string {
     const day = date.getDate().toString().padStart(2, '0');
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
@@ -126,6 +136,8 @@ export class ExampleHeader<D> implements OnDestroy {
     this._destroyed.next();
     this._destroyed.complete();
   }
+
+
 
   previousClicked(mode: 'month' | 'year') {
     this._calendar.activeDate =

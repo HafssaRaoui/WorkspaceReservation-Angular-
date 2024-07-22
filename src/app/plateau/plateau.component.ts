@@ -21,7 +21,9 @@ export class PlateauComponent implements OnInit {
     private positionService: PositionService,
     private route: ActivatedRoute,
     private router: Router,public dialog: MatDialog
-  ) {}
+  ) {
+    
+  }
 
   ngOnInit() {
     // Fetch the selected date if available
@@ -33,7 +35,7 @@ export class PlateauComponent implements OnInit {
         next: (positions: Position[]) => {
           // Transformez les positions en bureaux
           this.bureaux = positions.map(position => ({
-            plein: position.reservations && position.reservations.length > 0
+            plein: position.reservations && position.reservations.length > 0,reservations:position.reservations || [], numero :position.numero
           }));
           console.log('Les positions : ', this.bureaux);
         },
@@ -75,7 +77,7 @@ export class PlateauComponent implements OnInit {
       console.log('Le dialogue a été fermé');
     });
   }
-}
+
 
 
   formatDate(date: Date): string {
@@ -83,6 +85,6 @@ export class PlateauComponent implements OnInit {
     const day = ('0' + date.getDate()).slice(-2);
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const year = date.getFullYear();
-    return `${day}-${month}-${year}`;
+    return `${year}-${month}-${day}`;
   }
 }

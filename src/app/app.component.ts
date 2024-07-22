@@ -19,6 +19,7 @@ import { Router } from '@angular/router';
 export class AppComponent implements OnInit {
   title = 'mon-app-angular';
   positions: Position[] = [];
+  selectedDate: Date = new Date();
 
   constructor(private positionService:PositionService, private router: Router){
 
@@ -32,10 +33,36 @@ export class AppComponent implements OnInit {
     this.positionService.getPositions().subscribe((datas)=>{
       this.positions=datas;
     })
+    this.onDateSelected(this.formatDate(this.selectedDate));
   }
   onDateSelected(date: string) {
-    // Redirect to the plateau component with the selected date
     this.router.navigate(['/plateau'], { queryParams: { date } });
+    this.selectedDate = this.parseDate(date);
   }
+
+  previousDay() {
+    this.selectedDate.setDate(this.selectedDate.getDate() - 1);
+    this.onDateSelected(this.formatDate(this.selectedDate));
+  }
+
+  nextDay() {
+    this.selectedDate.setDate(this.selectedDate.getDate() + 1);
+    this.onDateSelected(this.formatDate(this.selectedDate));
+  }
+
+
+  formatDate(date: Date): string {
+    const day = ('0' + date.getDate()).slice(-2);
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const year = date.getFullYear();
+    return `${year}-${month}-${day}`;
+  }
+
+  parseDate(dateString: string): Date {
+    const [year, month, day] = dateString.split('-').map(part => parseInt(part, 10));
+    return new Date(year, month - 1, day);
+  }
+
+
 
 }
