@@ -18,6 +18,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatNativeDateModule } from '@angular/material/core';
 import { PopupComponent } from './popup/popup.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { PositionService } from './position.service';
 
 
 import { MatButtonModule } from '@angular/material/button';
@@ -42,6 +44,7 @@ import { MatIconModule } from '@angular/material/icon';
     HttpClientModule,
     CommonModule,
     MatButtonModule,
+    ReactiveFormsModule,
     MatDatepickerModule,
     MatFormFieldModule,
     MatIconModule,
@@ -55,7 +58,7 @@ import { MatIconModule } from '@angular/material/icon';
     FormsModule
     
   ],
-  providers: [],
+  providers: [PositionService],
   bootstrap: [AppComponent],
 })
 export class AppModule { }

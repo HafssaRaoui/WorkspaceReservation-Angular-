@@ -1,13 +1,7 @@
-export interface Reservation {
-  reservationId: number;
-  details: string;
-  userId : number;
-  first_name: String;
-  last_name: String;
-}
+import { Reservation } from "./reservation.model";
 
 export interface Position {
   id: number;
   numero: string;
-  reservations: Reservation[]; // Ajouter la liste des réservations
+  reservations: Reservation[]; 
 }

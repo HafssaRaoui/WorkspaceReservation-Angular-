@@ -2,7 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BureauComponent } from '../bureau/bureau.component';
 import { PositionService } from '../position.service';
-import { Position, Reservation } from '../models/position.model'; // Assurez-vous d'importer l'interface
+import { Position } from '../models/position.model'; // Assurez-vous d'importer l'interface
+import { Reservation } from '../models/reservation.model';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupComponent } from '../popup/popup.component';
 import { ActivatedRoute,Router } from '@angular/router';
@@ -14,7 +15,7 @@ import { ActivatedRoute,Router } from '@angular/router';
   imports: [CommonModule, BureauComponent]
 })
 export class PlateauComponent implements OnInit {
-  bureaux: { plein: boolean, reservations: Reservation[] ,numero: string}[] = [];
+  bureaux: { plein: boolean, reservations: Reservation[] ,numero: string,id: number}[] = [];
   selectedDate: string = this.formatDate(new Date());
 
   constructor(
@@ -54,7 +55,8 @@ export class PlateauComponent implements OnInit {
         this.bureaux = positions.map(position => ({
           plein: position.reservations && position.reservations.length > 0,
           reservations: position.reservations || [], // Assurez-vous de gérer les cas où reservations est null
-          numero: position.numero
+          numero: position.numero,
+          id:position.id
         }));
         console.log('Les positions : ', this.bureaux);
       },
@@ -63,13 +65,14 @@ export class PlateauComponent implements OnInit {
       }
     });
   }
-  openDialog(bureau: { plein: boolean, reservations: Reservation[] , numero: string }): void {
+  openDialog(bureau: { plein: boolean, reservations: Reservation[] , numero: string, id: number }): void {
     const dialogRef = this.dialog.open(PopupComponent, {
       width: '400px',
       data: {
         isReserved: bureau.plein,
         numero: bureau.numero,
-        reservations: bureau.reservations
+        reservations: bureau.reservations,
+        id:bureau.id
       }
     });
 

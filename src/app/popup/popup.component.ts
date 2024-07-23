@@ -1,8 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { PositionService } from '../position.service'; // Importez le service
+import { PositionService } from '../position.service';
 import { CommonModule } from '@angular/common';
-import './popup.component.css'; 
+import { Reservation } from '../models/reservation.model'; // Assurez-vous que le chemin est correct
+import { Position } from '../models/position.model';
 
 @Component({
   selector: 'app-popup',
@@ -14,17 +15,44 @@ import './popup.component.css';
 export class PopupComponent implements OnInit {
   message: string = '';
   isReserved: boolean = false;
+  position!: Position; 
+  positionId!: number;
+  positionNumero!: string;
+
+  
+  userId: number = 2;
+  firstName: string = 'Hafssa';
+  lastName: string = 'Raoui';
+  dialog: any;
+  positiontionService: any;
+  reservation: any;
+
   constructor(
     public dialogRef: MatDialogRef<PopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private positionService: PositionService // Injectez le service
+    private positionService: PositionService // Correctly inject the PositionService
   ) {}
+  
+  openDialog(position: any): void {
+    const dialogRef = this.dialog.open(PopupComponent, {
+      data: position 
+    });
+  
+    dialogRef.afterClosed().subscribe((result: any) => {
+      console.log('Le dialogue a été fermé', result);
+    });
+  }
 
   ngOnInit(): void {
-    this.isReserved = this.data.reservations && this.data.reservations.length > 0;
+    this.position = this.data;
+    this.isReserved = this.position.reservations && this.position.reservations.length > 0;
     this.message = this.isReserved 
       ? `Est-ce que vous voulez libérer cette position?` 
       : `Est-ce que vous voulez réserver cette position?`;
+      this.positionNumero = this.position.numero; 
+      this.positionId=this.position.id;
+      console.log('positionNumero dans ngOnInit:', this.positionNumero);
+      console.log('positionId dans ngOnInit:', this.positionId);
   }
 
   onNoClick(): void {
@@ -32,19 +60,31 @@ export class PopupComponent implements OnInit {
   }
 
   reserve(): void {
-    // Logique pour réserver la position (envoyer une requête au backend si nécessaire)
-    this.message = `Vous avez réservé la position : ${this.data.numero}`;
-    // Ajouter ici la logique pour appeler le service pour la réservation
-    // Exemple :
-    // this.positionService.reservePosition(this.data.numero).subscribe(() => { /* Handle success */ });
+    const reservation: Reservation = {
+      dateDeb: new Date('2024-07-22T14:52:18'),
+      dateFin: new Date('2024-07-23T14:52:18'),
+      userId: this.userId,
+      positionId: this.positionId, 
+      positionNumero: this.positionNumero,
+      firstName: this.firstName,
+      lastName: this.lastName
+    };
+  
+    console.log('Réservation envoyée:', reservation);
+  
+    if (this.positionService) {
+      this.positionService.reservePosition(reservation).subscribe((response: any) => {
+        console.log('Réservation réussie:', response);
+        window.location.reload();
+      }, (error: any) => {
+        console.error('Erreur lors de la réservation:', error);
+        if (error.error) {
+          console.error('Détails de l\'erreur:', error.error);
+        }
+      });
+    } else {
+      console.error('Le service de réservation n\'est pas défini.');
+    }
   }
-
-  release(): void {
-    // Logique pour libérer la position (envoyer une requête au backend si nécessaire)
-    this.message = `Vous avez libéré la position : ${this.data.numero}`;
-    // Ajouter ici la logique pour appeler le service pour la libération
-    // Exemple :
-    // this.positionService.releasePosition(this.data.numero).subscribe(() => { /* Handle success */ });
-  }
+  
 }
-
