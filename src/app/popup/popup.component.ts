@@ -61,8 +61,8 @@ export class PopupComponent implements OnInit {
 
   reserve(): void {
     const reservation: Reservation = {
-      dateDeb: new Date('2024-07-22T14:52:18'),
-      dateFin: new Date('2024-07-23T14:52:18'),
+      dateDeb: new Date('2024-07-26T14:52:18'),
+      dateFin: new Date('2024-07-27T14:52:18'),
       userId: this.userId,
       positionId: this.positionId, 
       positionNumero: this.positionNumero,
