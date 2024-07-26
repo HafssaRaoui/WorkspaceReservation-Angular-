@@ -9,7 +9,7 @@ import {  Reservation } from './models/reservation.model';
 })
 export class PositionService {
   readonly API_URL = "http://localhost:8080";
-  readonly ENDPOINT_Position = "/positions";
+  readonly ENDPOINT_Position = "/positions/reserved";
   readonly ENDPOINT_Reserve = "/reservations/reserve"; 
   readonly ENDPOINT_Release = "/reservations/release"; 
 
@@ -22,7 +22,7 @@ export class PositionService {
      
       url += `?date=${date}`;
     }
-    console.log('URL générée :', url);
+    console.log('URL gÃ©nÃ©rÃ©e :', url);
     return this.httpClient.get<Position[]>(url);
   }
 
