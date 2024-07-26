@@ -7,6 +7,7 @@ import { Reservation } from '../models/reservation.model';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupComponent } from '../popup/popup.component';
 import { ActivatedRoute,Router } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-plateau',
   templateUrl: './plateau.component.html',
@@ -21,12 +22,15 @@ export class PlateauComponent implements OnInit {
   constructor(
     private positionService: PositionService,
     private route: ActivatedRoute,
-    private router: Router,public dialog: MatDialog
+    private router: Router,public dialog: MatDialog,
+    private authService : AuthService
   ) {
     
   }
 
   ngOnInit() {
+
+    console.log("Access Token in ngOnInit: ", this.authService.accessToken);
     // Fetch the selected date if available
     this.route.queryParams.subscribe(params => {
       const dateParam = params['date'];

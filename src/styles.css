@@ -24,9 +24,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 } 
 .fleches {
-  gap: 1030px;
+  gap: 1010px;
   display: flex;
-  margin-top: 15px;
+  margin-top: 17px;
   margin: 5px;
 }
 

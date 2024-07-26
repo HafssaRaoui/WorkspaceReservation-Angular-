@@ -1,40 +1,55 @@
 import { Component } from '@angular/core';
 import { PlateauComponent } from './plateau/plateau.component';
-import { CommonModule } from '@angular/common'; 
+import { CommonModule } from '@angular/common';
 import { BureauComponent } from './bureau/bureau.component';
 import { PositionService } from './position.service';
 import { OnInit } from '@angular/core';
 import { Position } from './models/position.model';
 import { DatepickerCustomHeaderExample } from './datepicker-custom-header/datepicker-custom-header.component';
-import { Router } from '@angular/router';
+import { Router, RouterModule,NavigationEnd } from '@angular/router';
+import { filter } from 'rxjs/operators';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
   standalone: true,
-  imports: [PlateauComponent, BureauComponent, CommonModule,DatepickerCustomHeaderExample],
-  providers:[PositionService]
+  imports: [PlateauComponent, BureauComponent, CommonModule, DatepickerCustomHeaderExample, RouterModule],
+  providers: [PositionService]
 })
 export class AppComponent implements OnInit {
   title = 'mon-app-angular';
   positions: Position[] = [];
   selectedDate: Date = new Date();
+  showHeaderAndPicker: boolean = true;
 
-  constructor(private positionService:PositionService, private router: Router){
-
+  constructor(private positionService: PositionService, private router: Router) {
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    ).subscribe((event: NavigationEnd) => {
+      this.updateHeaderVisibility(event.urlAfterRedirects); // Use urlAfterRedirects to ensure redirects are handled
+    });
   }
-  
-  ngOnInit(){
 
-    
-    
-    console.log('On Init...')
-    this.positionService.getPositions().subscribe((datas)=>{
-      this.positions=datas;
-    })
+  ngOnInit() {
+
+    this.updateHeaderVisibility(this.router.url) }
+  updateHeaderVisibility(url: string) {
+    this.showHeaderAndPicker = !url.includes('/login');
+    console.log('Updated URL:', url);
+    console.log('Show header and picker:', this.showHeaderAndPicker);
+  }
+
+  fetchPositions() {
+    console.log('Fetching positions...');
+    this.positionService.getPositions().subscribe((datas) => {
+      this.positions = datas;
+    });
     this.onDateSelected(this.formatDate(this.selectedDate));
   }
+
+
+
   onDateSelected(date: string) {
     this.router.navigate(['/plateau'], { queryParams: { date } });
     this.selectedDate = this.parseDate(date);
