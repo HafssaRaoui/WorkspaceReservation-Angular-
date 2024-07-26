@@ -36,7 +36,7 @@ export class PlateauComponent implements OnInit {
         next: (positions: Position[]) => {
           // Transformez les positions en bureaux
           this.bureaux = positions.map(position => ({
-            plein: position.reservations && position.reservations.length > 0,reservations:position.reservations || [], numero :position.numero
+            plein: position.reservations && position.reservations.length > 0,reservations:position.reservations || [], numero :position.numero, id : position.id
           }));
           console.log('Les positions : ', this.bureaux);
         },
