@@ -4,6 +4,7 @@ import { PositionService } from '../position.service';
 import { CommonModule } from '@angular/common';
 import { Reservation } from '../models/reservation.model'; // Assurez-vous que le chemin est correct
 import { Position } from '../models/position.model';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-popup',
@@ -19,6 +20,7 @@ export class PopupComponent implements OnInit {
   positionId!: number;
   positionNumero!: string;
 
+  selectedDate!: Date;
   
   userId: number = 2;
   firstName: string = 'Hafssa';
@@ -30,7 +32,8 @@ export class PopupComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<PopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private positionService: PositionService // Correctly inject the PositionService
+    private positionService: PositionService, // Correctly inject the PositionService
+    private route: ActivatedRoute
   ) {}
   
   openDialog(position: any): void {
@@ -46,6 +49,7 @@ export class PopupComponent implements OnInit {
   ngOnInit(): void {
     this.position = this.data;
     this.isReserved = this.position.reservations && this.position.reservations.length > 0;
+    this.selectedDate = new Date(this.data.currentDate);
     this.message = this.isReserved 
       ? `Est-ce que vous voulez libérer cette position?` 
       : `Est-ce que vous voulez réserver cette position?`;
@@ -53,6 +57,7 @@ export class PopupComponent implements OnInit {
       this.positionId=this.position.id;
       console.log('positionNumero dans ngOnInit:', this.positionNumero);
       console.log('positionId dans ngOnInit:', this.positionId);
+      console.log('Date sélectionnée:', this.selectedDate);
   }
 
   onNoClick(): void {
@@ -61,15 +66,15 @@ export class PopupComponent implements OnInit {
 
   reserve(): void {
     const reservation: Reservation = {
-      dateDeb: new Date('2024-07-26T14:52:18'),
-      dateFin: new Date('2024-07-27T14:52:18'),
+      dateDeb: new Date(this.selectedDate),
+      dateFin: new Date(this.selectedDate),
       userId: this.userId,
       positionId: this.positionId, 
       positionNumero: this.positionNumero,
       firstName: this.firstName,
       lastName: this.lastName
     };
-  
+    reservation.dateFin.setHours(23, 59, 59, 999);
     console.log('Réservation envoyée:', reservation);
   
     if (this.positionService) {
@@ -85,6 +90,13 @@ export class PopupComponent implements OnInit {
     } else {
       console.error('Le service de réservation n\'est pas défini.');
     }
+  }
+  private formatDate(date: Date): string {
+    return date.toLocaleDateString('fr-FR', {
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit'
+    });
   }
   
 }

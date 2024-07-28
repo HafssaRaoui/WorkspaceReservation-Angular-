@@ -5,13 +5,15 @@ import { MatDialog } from '@angular/material/dialog';
 import { PopupComponent } from '../popup/popup.component'
 import { Position } from '../models/position.model';
 import { PositionService } from '../position.service';
+import { PlateauComponent } from '../plateau/plateau.component';
+import { SharedDataService } from '../shared-data.service';
 
 @Component({
   selector: 'app-bureau',
   templateUrl: './bureau.component.html',
   styleUrls: ['./bureau.component.css'],
   standalone:true,
-  imports: [CommonModule]
+  imports: [CommonModule,PlateauComponent]
 })
 export class BureauComponent {
   @Input() plein: boolean = false; // Assurez-vous que `plein` est correctement initialisé
@@ -19,6 +21,7 @@ export class BureauComponent {
   @Input() numero: string = '';
   @Input() id:number = 1;
   @Input() positions: Position[] = [];
+  currentDate!: Date;
 
 
    
@@ -28,9 +31,13 @@ export class BureauComponent {
 
   constructor(
     private positionService: PositionService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private sharedDataService: SharedDataService
   ) {}
   ngOnInit(): void {
+    this.sharedDataService.currentSelectedDate.subscribe(date => {
+      this.currentDate = date;
+    });
     this.positionService.getPositions().subscribe(positions => {
       this.positions = positions;
     });
@@ -47,7 +54,9 @@ export class BureauComponent {
   openDialog(): void {
     this.dialog.open(PopupComponent, {
       width: '250px',
-      data: { numero: this.numero, reservations: this.reservations, id:this.id }
+      data: { numero: this.numero, reservations: this.reservations, id:this.id,
+        currentDate: this.currentDate 
+       }
     });
   }
 }

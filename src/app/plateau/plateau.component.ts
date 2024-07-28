@@ -7,6 +7,7 @@ import { Reservation } from '../models/reservation.model';
 import { MatDialog } from '@angular/material/dialog';
 import { PopupComponent } from '../popup/popup.component';
 import { ActivatedRoute,Router } from '@angular/router';
+import { SharedDataService } from '../shared-data.service';
 import { AuthService } from '../services/auth.service';
 @Component({
   selector: 'app-plateau',
@@ -17,12 +18,14 @@ import { AuthService } from '../services/auth.service';
 })
 export class PlateauComponent implements OnInit {
   bureaux: { plein: boolean, reservations: Reservation[] ,numero: string,id: number}[] = [];
-  selectedDate: string = this.formatDate(new Date());
+  selectedDate: Date = new Date();
+  currentDate!: string;
 
   constructor(
     private positionService: PositionService,
     private route: ActivatedRoute,
     private router: Router,public dialog: MatDialog,
+    private sharedDataService: SharedDataService,
     private authService : AuthService
   ) {
     
@@ -34,13 +37,17 @@ export class PlateauComponent implements OnInit {
     // Fetch the selected date if available
     this.route.queryParams.subscribe(params => {
       const dateParam = params['date'];
-      const dateToFetch = dateParam ? dateParam : this.formatDate(new Date());
+      this.selectedDate = dateParam ? new Date(dateParam) : new Date();
+      this.sharedDataService.updateSelectedDate(this.selectedDate);
+      const dateToFetch = this.formatDate(this.selectedDate);
+      
+      this.fetchPositions(dateToFetch);
       
       this.positionService.getPositions(dateToFetch).subscribe({
         next: (positions: Position[]) => {
           // Transformez les positions en bureaux
           this.bureaux = positions.map(position => ({
-            plein: position.reservations && position.reservations.length > 0,reservations:position.reservations || [], numero :position.numero, id : position.id
+            plein: position.reservations && position.reservations.length > 0,reservations:position.reservations || [], numero :position.numero,id: position.id
           }));
           console.log('Les positions : ', this.bureaux);
         },
@@ -76,7 +83,8 @@ export class PlateauComponent implements OnInit {
         isReserved: bureau.plein,
         numero: bureau.numero,
         reservations: bureau.reservations,
-        id:bureau.id
+        id:bureau.id,
+        currentDate: this.selectedDate
       }
     });
 
@@ -88,7 +96,6 @@ export class PlateauComponent implements OnInit {
 
 
   formatDate(date: Date): string {
-    // Formattez la date comme DD-MM-YYYY
     const day = ('0' + date.getDate()).slice(-2);
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const year = date.getFullYear();
