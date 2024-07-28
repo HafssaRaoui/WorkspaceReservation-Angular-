@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BureauComponent } from '../bureau/bureau.component';
 import { PositionService } from '../position.service';
@@ -26,7 +26,8 @@ export class PlateauComponent implements OnInit {
     private route: ActivatedRoute,
     private router: Router,public dialog: MatDialog,
     private sharedDataService: SharedDataService,
-    private authService : AuthService
+    private authService : AuthService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     
   }
@@ -70,6 +71,7 @@ export class PlateauComponent implements OnInit {
           id:position.id
         }));
         console.log('Les positions : ', this.bureaux);
+        this.changeDetectorRef.detectChanges();
       },
       error: (error) => {
         console.error('Erreur lors de la récupération des positions :', error);
@@ -89,7 +91,22 @@ export class PlateauComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Le dialogue a été fermé');
+      if (result) {
+        // Mettre à jour l'état local immédiatement
+        const updatedBureau = this.bureaux.find(b => b.id === result.positionId);
+        if (updatedBureau) {
+          updatedBureau.plein = true;
+          updatedBureau.reservations = updatedBureau.reservations || [];
+          if (updatedBureau.reservations.length === 0) {
+            updatedBureau.reservations.push({} as Reservation);
+          }
+        }
+        // Forcer la détection de changements
+        this.changeDetectorRef.detectChanges();
+        
+        // Puis rafraîchir les données du serveur
+        this.fetchPositions(this.formatDate(result.date));
+      }
     });
   }
 

@@ -81,6 +81,7 @@ export class PopupComponent implements OnInit {
       this.positionService.reservePosition(reservation).subscribe((response: any) => {
         console.log('Réservation réussie:', response);
         window.location.reload();
+        this.dialogRef.close({date: this.selectedDate, positionId: this.positionId});
       }, (error: any) => {
         console.error('Erreur lors de la réservation:', error);
         if (error.error) {
