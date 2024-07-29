@@ -10,6 +10,9 @@ export class AuthService {
   isAuthenticated : boolean = false;
   email : any ;
   accessToken!: string;
+  userId!: number;
+  firstName!: string;
+  lastName!: string;
 
 
   constructor(private http:HttpClient){}
@@ -31,12 +34,21 @@ export class AuthService {
     let decodedJwt:any = jwtDecode(this.accessToken);
 
     this.email = decodedJwt.sub;
+    this.userId = decodedJwt.userId; 
+    this.firstName = decodedJwt.firstName; 
+    this.lastName = decodedJwt.lastName;
     localStorage.setItem("angular17token", this.accessToken);
   
 
   }
 
-
+  getUserDetails() {
+    return {
+      userId: this.userId,
+      firstName: this.firstName,
+      lastName: this.lastName
+    };
+  }
 
 
 }
