@@ -49,10 +49,10 @@ export class BureauComponent {
 
   getImageTitle(): string {
     if (this.reservations.length === 0) {
-      return `Position: ${this.id}`;
+      return `Position: ${this.numero}`;
     } else {
       const reservation = this.reservations[0];
-      return `Position: ${this.id} \n Réservé par: ${reservation.firstName} ${reservation.lastName}`;
+      return `Position: ${this.numero} \n Réservé par: ${reservation.firstName} ${reservation.lastName}`;
     }
   }
   openDialog(): void {
