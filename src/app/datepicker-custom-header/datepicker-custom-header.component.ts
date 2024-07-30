@@ -47,8 +47,8 @@ export class DatepickerCustomHeaderExample implements OnInit , OnChanges {
   ngOnInit() {
     this.dateControl.valueChanges.subscribe(date => {
       if (date) {
-        const selectedDate = this.formatDate(date); // Format date as DD-MM-YYYY
-        console.log('Date sélectionnée :', selectedDate); // Debug log
+        const selectedDate = this.formatDate(date); 
+        console.log('Date sélectionnée :', selectedDate); 
         this.dateSelected.emit(selectedDate);
       }
     });
