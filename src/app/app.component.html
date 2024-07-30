@@ -1,16 +1,17 @@
 <!-- app.component.html -->
 <div *ngIf="showHeaderAndPicker">
-  <header>
-    <div class="fleches">
-      <i class="fa-sharp fa-solid fa-backward" style="color: #FFD43B;" (click)="previousDay()"></i>
-      <i class="fa-sharp fa-solid fa-forward" style="color: #FFD43B;" (click)="nextDay()"></i>
-    </div>
-    <div class="date-picker">
-      <datepicker-custom-header [selectedDate]="selectedDate" (dateSelected)="onDateSelected($event)"></datepicker-custom-header>
-    </div>
-  </header>
+    <header>
+        <div class="fleches">
+            <i class="fa-sharp fa-solid fa-backward" style="color: #FFD43B;" (click)="previousDay()"></i>
+            <i class="fa-sharp fa-solid fa-forward" style="color: #FFD43B;" (click)="nextDay()"></i>
+        </div>
+        <div class="date-picker">
+            <datepicker-custom-header [selectedDate]="selectedDate" (dateSelected)="onDateSelected($event)"></datepicker-custom-header>
+
+        </div>
+    </header>
 </div>
 
 <main>
-  <router-outlet></router-outlet>
+    <router-outlet></router-outlet>
 </main>
