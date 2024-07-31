@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Reservation } from '../models/reservation.model';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,20 +13,19 @@ import { SharedDataService } from '../shared-data.service';
   templateUrl: './bureau.component.html',
   styleUrls: ['./bureau.component.css'],
   standalone:true,
-  imports: [CommonModule,PlateauComponent]
+  imports: [CommonModule,PlateauComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class BureauComponent {
-  @Input() plein: boolean = false; // Assurez-vous que `plein` est correctement initialisé
+  @Input() plein: boolean = false; 
   @Input() reservations: Reservation[] = [];
   @Input() numero: string = '';
   @Input() id:number = 1;
   @Input() positions: Position[] = [];
+
   currentDate!: Date;
 
 
-  getImageSrc(): string {
-    return this.plein ? 'assets/images/empty-office.png' : 'chemin/vers/full-office.png';
-  }
 
 
   // URL des images hébergées sur Internet
@@ -42,10 +41,12 @@ export class BureauComponent {
     this.sharedDataService.currentSelectedDate.subscribe(date => {
       this.currentDate = date;
     });
-    this.positionService.getPositions().subscribe(positions => {
-      this.positions = positions;
-    });
+    //console.log(`Bureau component initialized: id=${this.id}`);
+    // this.positionService.getPositions().subscribe(positions => {
+    //   this.positions = positions;
+    // });
   }
+
 
   getImageTitle(): string {
     if (this.reservations.length === 0) {

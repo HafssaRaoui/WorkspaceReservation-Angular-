@@ -14,14 +14,14 @@ import { MatInputModule } from '@angular/material/input';
 import { CommonModule } from '@angular/common';
 import { BehaviorSubject, Subject } from 'rxjs';
 import { startWith, takeUntil } from 'rxjs/operators';
-import { CUSTOM_DATE_FORMATS } from './custom-date-formats'; // Ensure correct path
-import { CustomDateAdapter } from './custom-date-adapter'; // Ensure correct path
+import { CUSTOM_DATE_FORMATS } from './custom-date-formats';
+import { CustomDateAdapter } from './custom-date-adapter'; 
 import { ChangeDetectorRef } from '@angular/core';
 
 /** @title Datepicker with custom calendar header */
 @Component({
   selector: 'datepicker-custom-header',
-  templateUrl: './datepicker-custom-header.component.html', // Ensure correct path
+  templateUrl: './datepicker-custom-header.component.html', 
   standalone: true,
   providers: [
     { provide: DateAdapter, useClass: CustomDateAdapter },
@@ -45,16 +45,19 @@ export class DatepickerCustomHeaderExample implements OnInit , OnChanges {
   @Output() dateSelected = new EventEmitter<string>();
 
   ngOnInit() {
+    if (this.selectedDate) {
+      this.dateControl.setValue(this.selectedDate, { emitEvent: false });
+    }
+  
     this.dateControl.valueChanges.subscribe(date => {
       if (date) {
         const selectedDate = this.formatDate(date); // Format date as DD-MM-YYYY
-        console.log('Date sélectionnée :', selectedDate); // Debug log
+        console.log('Date sélectionnée :', selectedDate); 
         this.dateSelected.emit(selectedDate);
       }
     });
-
-  
   }
+  
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['selectedDate'] && this.selectedDate) {

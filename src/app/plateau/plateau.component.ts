@@ -17,7 +17,7 @@ import { AuthService } from '../services/auth.service';
   imports: [CommonModule, BureauComponent]
 })
 export class PlateauComponent implements OnInit {
-  bureaux: { plein: boolean, reservations: Reservation[] ,numero: string,id: number}[] = [];
+  bureaux: { plein: boolean, reservations: Reservation[] ,numero: string,id: number,positions: Position[]}[] = [];
   selectedDate: Date = new Date();
   currentDate!: string;
 
@@ -33,9 +33,9 @@ export class PlateauComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    console.log('Parent component initialized');
     console.log("Access Token in ngOnInit: ", this.authService.accessToken);
-    // Fetch the selected date if available
+ 
     this.route.queryParams.subscribe(params => {
       const dateParam = params['date'];
       this.selectedDate = dateParam ? new Date(dateParam) : new Date();
@@ -44,18 +44,18 @@ export class PlateauComponent implements OnInit {
       
       this.fetchPositions(dateToFetch);
       
-      this.positionService.getPositions(dateToFetch).subscribe({
-        next: (positions: Position[]) => {
-          // Transformez les positions en bureaux
-          this.bureaux = positions.map(position => ({
-            plein: position.reservations && position.reservations.length > 0,reservations:position.reservations || [], numero :position.numero,id: position.id
-          }));
-          console.log('Les positions : ', this.bureaux);
-        },
-        error: (error) => {
-          console.error('Erreur lors de la récupération des positions :', error);
-        }
-      });
+      // this.positionService.getPositions(dateToFetch).subscribe({
+      //   next: (positions: Position[]) => {
+      //     // Transformez les positions en bureaux
+      //     this.bureaux = positions.map(position => ({
+      //       plein: position.reservations && position.reservations.length > 0,reservations:position.reservations || [], numero :position.numero,id: position.id
+      //     }));
+      //     console.log('Les positions : ', this.bureaux);
+      //   },
+      //   error: (error) => {
+      //     console.error('Erreur lors de la récupération des positions :', error);
+      //   }
+      // });
     });
   }
   
@@ -63,14 +63,13 @@ export class PlateauComponent implements OnInit {
     this.positionService.getPositions(date).subscribe({
       next: (positions: Position[]) => {
         console.log('Positions received:', positions);
-        // Transformez les positions en bureaux avec les informations sur les réservations
         this.bureaux = positions.map(position => ({
           plein: position.reservations && position.reservations.length > 0,
-          reservations: position.reservations || [], // Assurez-vous de gérer les cas où reservations est null
+          reservations: position.reservations || [], 
           numero: position.numero,
-          id:position.id
+          id:position.id,
+          positions: [position]
         }));
-        console.log('Les positions : ', this.bureaux);
         this.changeDetectorRef.detectChanges();
       },
       error: (error) => {
@@ -92,7 +91,7 @@ export class PlateauComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        // Mettre à jour l'état local immédiatement
+        
         const updatedBureau = this.bureaux.find(b => b.id === result.positionId);
         if (updatedBureau) {
           updatedBureau.plein = true;
@@ -101,10 +100,10 @@ export class PlateauComponent implements OnInit {
             updatedBureau.reservations.push({} as Reservation);
           }
         }
-        // Forcer la détection de changements
+
         this.changeDetectorRef.detectChanges();
         
-        // Puis rafraîchir les données du serveur
+       
         this.fetchPositions(this.formatDate(result.date));
       }
     });

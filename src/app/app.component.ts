@@ -32,13 +32,22 @@ export class AppComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.updateHeaderVisibility(this.router.url);
 
-    this.updateHeaderVisibility(this.router.url) }
+    // Extract date from URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const dateParam = urlParams.get('date');
+    if (dateParam) {
+      this.selectedDate = this.parseDate(dateParam);
+    }
+  }
+
   updateHeaderVisibility(url: string) {
     this.showHeaderAndPicker = !url.includes('/login');
     console.log('Updated URL:', url);
     console.log('Show header and picker:', this.showHeaderAndPicker);
   }
+
 
   fetchPositions() {
     console.log('Fetching positions...');
