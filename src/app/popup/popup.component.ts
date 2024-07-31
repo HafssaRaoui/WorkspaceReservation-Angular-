@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { Reservation } from '../models/reservation.model'; // Assurez-vous que le chemin est correct
 import { Position } from '../models/position.model';
 import { ActivatedRoute } from '@angular/router';
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-popup',
@@ -22,9 +23,9 @@ export class PopupComponent implements OnInit {
 
   selectedDate!: Date;
   
-  userId: number = 2;
-  firstName: string = 'Hafssa';
-  lastName: string = 'Raoui';
+  userId!: number ;
+  firstName!:string ;
+  lastName!:string;
   dialog: any;
   positiontionService: any;
   reservation: any;
@@ -32,8 +33,9 @@ export class PopupComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<PopupComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private positionService: PositionService, // Correctly inject the PositionService
-    private route: ActivatedRoute
+    private positionService: PositionService, 
+    private route: ActivatedRoute,
+    private authService : AuthService
   ) {}
   
   openDialog(position: any): void {
@@ -55,9 +57,21 @@ export class PopupComponent implements OnInit {
       : `Est-ce que vous voulez réserver cette position?`;
       this.positionNumero = this.position.numero; 
       this.positionId=this.position.id;
+
+
+      // Récupérer les détails de l'utilisateur authentifié
+      const userDetails = this.authService.getUserDetails();
+      this.userId = userDetails.userId;
+      this.firstName = userDetails.firstName;
+      this.lastName = userDetails.lastName;
+
+
       console.log('positionNumero dans ngOnInit:', this.positionNumero);
       console.log('positionId dans ngOnInit:', this.positionId);
       console.log('Date sélectionnée:', this.selectedDate);
+      console.log('firstName dans ngOnInit:', this.firstName);
+      console.log('lastName dans ngOnInit:', this.lastName);
+      console.log('UserId:', this.userId);
   }
 
   onNoClick(): void {

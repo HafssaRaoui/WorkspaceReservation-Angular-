@@ -15,7 +15,9 @@ export class AuthService {
   lastName!: string;
 
 
-  constructor(private http:HttpClient){}
+  constructor(private http:HttpClient){
+    this.loadUserFromLocalStorage();
+  }
   public login(email : string , password : string){
     let options =  {
       headers : new HttpHeaders().set("Content-Type","application/x-www-form-urlencoded")
@@ -37,6 +39,7 @@ export class AuthService {
     this.userId = decodedJwt.userId; 
     this.firstName = decodedJwt.firstName; 
     this.lastName = decodedJwt.lastName;
+    this.saveUserToLocalStorage();
     localStorage.setItem("angular17token", this.accessToken);
   
 
@@ -48,6 +51,28 @@ export class AuthService {
       firstName: this.firstName,
       lastName: this.lastName
     };
+  }
+
+
+  saveUserToLocalStorage() {
+    localStorage.setItem('userDetails', JSON.stringify({
+      email: this.email,
+      userId: this.userId,
+      firstName: this.firstName,
+      lastName: this.lastName
+    }));
+  }
+
+  loadUserFromLocalStorage() {
+    const userDetails = localStorage.getItem('userDetails');
+    if (userDetails) {
+      const { email, userId, firstName, lastName } = JSON.parse(userDetails);
+      this.email = email;
+      this.userId = userId;
+      this.firstName = firstName;
+      this.lastName = lastName;
+      this.isAuthenticated = true;
+    }
   }
 
 
