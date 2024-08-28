@@ -19,13 +19,31 @@
 
 ## Quick Demo
 
-1. **Connect to Your Account**
+1. **Login Page**
 
-   ![Connect to Your Account](images/connect-to-account.png)
+   <img src="images/authentification.png"  width="700" />
+   
+1. **Sign in to  your account**
 
-2. **Click and Book**
+   <img src="images/user.png"  width="700" />
+    
+3. **View the workspace state today or any date you like**
+   
+   <img src="images/PAGE PLATEAU.png"  width="700" />
 
-   ![Click and Book](images/click-and-book-1.png)
-   ![Click and Book](images/click-and-book-2.png)
+   Select the date you want to explore using the **date picker** or **the arrows**
+
+     <img src="images/SELECTIONNER UNE DATE.png"  width="700" />
+
+
+4- **View Your Work Fellow's Desks**
+
+  
+
+
+  
+
+  
+
 
 
