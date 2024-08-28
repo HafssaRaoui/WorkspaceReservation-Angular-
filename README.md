@@ -35,8 +35,29 @@
 
      <img src="images/SELECTIONNER UNE DATE.png"  width="700" />
 
+4. **View Your Work Fellow's Desks**
 
-4- **View Your Work Fellow's Desks**
+   <img src="images/survoler.png"  width="700" />
+
+5. **Book your desk in one Click**
+
+   <img src="images/reserver.png"  width="700" />
+
+   ✔️ Reservation done <br/>
+
+      <img src="images/reservation effectuée.png"  width="700" />
+
+6. **Explore other features such as:**
+
+   ✔️ Canceling your reservation by click on your current position <br/>
+   ✔️ Choose your team members optimal work distribution as a team manager <br/>
+
+
+
+     
+
+
+
 
   
 
