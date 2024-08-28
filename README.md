@@ -49,7 +49,7 @@
 
 6. **Explore other features such as:**
 
-   ✔️ Canceling your reservation by click on your current position <br/>
+   ✔️ Canceling your reservation by clicking on your current position <br/>
    ✔️ Choose your team members optimal work distribution as a team manager <br/>
 
 
