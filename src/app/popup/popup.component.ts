@@ -15,6 +15,7 @@ import { AuthService } from '../services/auth.service';
   imports: [CommonModule]
 })
 export class PopupComponent implements OnInit {
+  
   message: string = '';
   isReserved: boolean = false;
   position!: Position; 
@@ -106,6 +107,10 @@ export class PopupComponent implements OnInit {
       console.error('Le service de réservation n\'est pas défini.');
     }
   }
+
+
+
+
   private formatDate(date: Date): string {
     return date.toLocaleDateString('fr-FR', {
       year: 'numeric',
